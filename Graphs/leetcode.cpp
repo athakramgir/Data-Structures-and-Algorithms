@@ -390,7 +390,7 @@ int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
         if(word == endWord) {
             return steps; 
         }
-        // This takes O(wordLenght*26*N*log(N)) N is the number of words in the wordList 
+        // This takes O(wordLength*26*N*log(N)) N is the number of words in the wordList 
         // S(N) = O(N) 
         for(int i = 0; i < word.size(); i++) {
             char org = word[i]; 
