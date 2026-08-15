@@ -25,6 +25,7 @@ vector<int> topoSort(vector<vector<int>> &adj, int v)
         }
     }
     vector<int> topo_sorted;
+
     while (!st.empty())
     {
         topo_sorted.push_back(st.top());
@@ -125,35 +126,107 @@ bool canFinish(int n, vector<vector<int>> &edges)
     return true;
 }
 
-// b) Using DFS 
+// b) Using DFS
 
-bool cycleDetectDAG(int node, vector<int>& vis, vector<int>& pathVis, vector<vector<int>>& adj) {
-    vis[node] = 1; 
-    pathVis[node] = 1; 
-    for(auto neighbor : adj[node]) {
-        if(!vis[neighbor]) {
-            if(cycleDetectDAG(neighbor, vis, pathVis, adj)) {
-                return true; 
+bool cycleDetectDAG(int node, vector<int> &vis, vector<int> &pathVis, vector<vector<int>> &adj)
+{
+    vis[node] = 1;
+    pathVis[node] = 1;
+    for (auto neighbor : adj[node])
+    {
+        if (!vis[neighbor])
+        {
+            if (cycleDetectDAG(neighbor, vis, pathVis, adj))
+            {
+                return true;
             }
         }
-        else if(pathVis[neighbor]){
-            return true; 
+        else if (pathVis[neighbor])
+        {
+            return true;
         }
     }
-    pathVis[node] = 0; 
+    pathVis[node] = 0;
     return false;
 }
-bool isCyclic(vector<vector<int>>& adj, int n) {
-    vector<int> vis(n, 0); 
-    vector<int> pathVis(n, 0); 
-    for(int i = 0; i < n; i++) {
-        if(!vis[i]) {
-            if(cycleDetectDAG(i, vis, pathVis, adj)){
-                return true; 
-            } 
+bool isCyclic(vector<vector<int>> &adj, int n)
+{
+    vector<int> vis(n, 0);
+    vector<int> pathVis(n, 0);
+    for (int i = 0; i < n; i++)
+    {
+        if (!vis[i])
+        {
+            if (cycleDetectDAG(i, vis, pathVis, adj))
+            {
+                return true;
+            }
         }
     }
-    return false; 
+    return false;
+}
+
+/*-----------------------------------------Shortest path in a Directed Weighted Graph--------------------------------*/
+// returning a distance array giving shortest distance of each node from src
+void dfs(int node, stack<int> &st, vector<pair<int, int>> adj[], vector<int> &vis)
+{
+    vis[node] = 1;
+    for (auto it : adj[node])
+    {
+        int v = it.first;
+        int wt = it.second;
+        if (!vis[v])
+        {
+            dfs(v, st, adj, vis);
+        }
+    }
+    st.push(node);
+}
+vector<int> shortestPath(int V, vector<vector<int>> &edges)
+{
+    // code here
+    int N = edges.size();
+    vector<pair<int, int>> adj[V];
+    for (int i = 0; i < N; i++)
+    {
+        int u = edges[i][0];
+        int v = edges[i][1];
+        int w = edges[i][2];
+        adj[u].push_back({v, w});
+    }
+    stack<int> st; 
+    int src = 0;
+    vector<int> vis(V, 0);
+    for (int i = 0; i < V; i++)
+    {
+        if (!vis[i])
+        {
+            dfs(i, st, adj, vis);
+        }
+    }
+    vector<int> dist(V, 1e9);
+    dist[src] = 0;
+    while (!st.empty())
+    {
+        int node = st.top();
+        st.pop();
+        int distance = dist[node];
+        for (auto it : adj[node])
+        {
+            int v = it.first;
+            int wt = it.second;
+            if (dist[node] + wt < dist[v])
+            {
+                dist[v] = dist[node] + wt;
+            }
+        }
+    }
+    for (int i = 0; i < V; i++)
+    {
+        if (dist[i] == 1e9)
+            dist[i] = -1;
+    }
+    return dist;
 }
 int main()
 {
