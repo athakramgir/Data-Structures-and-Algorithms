@@ -27,7 +27,7 @@ vector<int> shortestPath(int V, vector<vector<int>> &edges)
         int w = edges[i][2];
         adj[u].push_back({v, w});
     }
-    stack<int> st;
+    stack<int> st;  
     int src = 0;
     vector<int> vis(V, 0);
     for (int i = 0; i < V; i++)
