@@ -377,7 +377,7 @@ int numEnclaves(vector<vector<int>> &grid)
     }
     return count;
 }
-/*----------------------------------------------LeetCode 127 - Word Ladder ----------------------------------------------------------*/
+/*----------------------------------------------LeetCode 127 - Word Ladder II----------------------------------------------------------*/
 int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
     queue<pair<string, int>> q; 
     q.push({beginWord, 1}); 
@@ -406,7 +406,7 @@ int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
     }
     return 0 ; 
 }
-/*-------------------------------------------LeetCode 785 Is the Graph Bipartite? -------------------------------------------------------*/
+/*------------------------------------------LeetCode 785 Is the Graph Bipartite?------------------------------------------------------*/
 /*- Key Idea - a bipartite graph can be colored with only two colors--*/
 /*------ T(n) = O(V + 2*E), S(n) = O(V)------*/
 bool dfs(int node, int color, int colour[], vector<vector<int>>& adj) {
