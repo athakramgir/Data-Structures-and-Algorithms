@@ -437,6 +437,60 @@ bool isBipartite(vector<vector<int>>& graph) {
     }
     return true; 
 }
+/*----------------LC 882 Reachable Nodes in a Subdivided graph------------------------------------------------*/
+// idea is to treat the number of nodes added in subdivided graphs as edge weights, and then find out if we can actually reach the origional nodes in maxMoves or less. When we have dist[] containing minimum distances, we can check for the added nodes in subdivided graph. For every edge (u, v, cnt), we have to check if we can reach v in maxMoves or not, if not then we have to add the number of intermediate nodes that can be reached from u as well as v. ans += min({cnt, fromU + fromV})
+int reachableNodes(vector<vector<int>>& edges, int maxMoves, int n) {
+    int V = n;
+    int E = edges.size(); 
+    vector<vector<pair<int,int>>> adj(V);
+    for(auto edge: edges) {
+        int u = edge[0]; 
+        int v = edge[1]; 
+        int cnt = edge[2]; 
+        adj[u].push_back({v, cnt}); 
+        adj[v].push_back({u, cnt}); 
+    }
+    priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq; 
+    vector<int> dist(V, 1e9); 
+    dist[0] = 0; 
+    pq.push({0, 0}); 
+    while(!pq.empty()) {
+        int node = pq.top().second; 
+        int cnt = pq.top().first; 
+        pq.pop(); 
+        for(auto iter : adj[node]) {
+            int adjNode = iter.first; 
+            int adjCnt = iter.second; 
+            int newCnt = cnt + 1 + adjCnt; 
+            if(newCnt < dist[adjNode]){
+                dist[adjNode] = newCnt; 
+                pq.push({newCnt, adjNode}); 
+            }
+        }
+    }
+    int ans = 0; 
+    for(int i = 0; i < V; i++) {
+        if(dist[V] < maxMoves) {
+            ans++; 
+        }
+    }
+    for(auto it : edges) {
+        int u = it[0]; 
+        int v = it[1]; 
+        int cnt = it[2]; 
+        
+        int fromU = 0; 
+        int fromV = 0; 
+        if(dist[u] <= maxMoves) {
+            fromU = maxMoves - dist[u]; 
+        }
+        if(dist[v] <= maxMoves) {
+            fromV = maxMoves - dist[v]; 
+        }
+        ans += min(cnt, fromV + fromU); 
+    }
+    return ans; 
+}
 int main()
 {
     return 0;
