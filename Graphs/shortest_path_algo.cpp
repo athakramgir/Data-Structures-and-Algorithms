@@ -157,7 +157,7 @@ void floydWarshall(vector<vector<int>> &dist) {
     int V = dist.size(); 
     for(int i = 0; i < V; i++) {
         dist[i][i] = 0; 
-    }
+    } 
     for(int via = 0; via < V; via++){
         for(int i = 0; i < V; i++) {
             for(int j = 0; j < V; j++) { 
@@ -166,7 +166,7 @@ void floydWarshall(vector<vector<int>> &dist) {
                 }
             }
         }
-    }
+    } 
 }
 int main(){
     
