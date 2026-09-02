@@ -79,6 +79,41 @@ int countPaths(int n, vector<vector<int>>& roads) {
     }
     return ways[V-1]%MOD; 
 }
+/*---------------------------1368. Minimum Cost to Make at Least One Valid Path in a Grid----------------*/
+const int INF = 1e9; 
+int minCost(vector<vector<int>>& grid) {
+    int m = grid.size(); 
+    int n = grid[0].size(); 
+    vector<vector<int>> dist(m, vector<int>(n, INF)); 
+    dist[0][0] = 0; 
+    deque<pair<int,int>> dq; 
+    int dx[] = {INF, 0, 0, 1, -1}; 
+    int dy[] = {INF, 1, -1, 0, 0}; 
+    dq.push_front({0, 0}); 
+    while(!dq.empty()) {
+        auto node = dq.front(); dq.pop_front();    
+        int x = node.first; 
+        int y = node.second; 
+        for(int i = 1; i <= 4; i++) {
+            int nx = x + dx[i]; 
+            int ny = y + dy[i]; 
+            if(nx >= 0 && nx < m && ny < n && ny >= 0) {
+                int newCost = dist[x][y] + (grid[x][y] == i) ? 0 : 1; 
+                if(newCost < dist[nx][ny]) {
+                    dist[nx][ny] = newCost; 
+                    if(grid[x][y] == i) {
+                        dq.push_front({nx, ny}); 
+                    }
+                    else {
+                        dq.push_back({nx, ny}); 
+                    }
+                }
+            }
+        }
+    }
+    return dist[m-1][n-1]; 
+}
+
 long long main(){
     
     return 0;

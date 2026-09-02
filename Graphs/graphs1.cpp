@@ -164,6 +164,34 @@ bool isCyclic(int V, vector<int> adj[]) {
     }
     return false; 
 }
+
+/*--------------------------------------0-1 BFS algorithm using Deque-------------------------------------*/
+// This is basically to find out the shortest path only the difference here is that we have a graph with either 0 or 1 as edge weight. We can also use Dijkstra but then we'll have to maintain a heap. We can skip that by using a deque. The 0-1 BFS algorithm optimizes Dijkstra’s Algorithm for graphs with edge weights of 0 and 1. Standard Dijkstra uses a priority queue (O(E x log(V))), but the restricted edge weights allow for a deque (O(V + E)) due to the limited distance discovery range.
+vector<int> bfs01(vector<vector<pair<int, int>>>& adj, int V, int src) {
+    const int INF = 1e9; 
+    vector<int> dist(V, INF); 
+    deque<int> dq; 
+    dq.push_front(src); 
+    dist[src] = 0; 
+    while(!dq.empty()) {
+        int node = dq.front(); 
+        dq.pop_front(); 
+        for(auto it : adj[node]) {
+            int adjNode = it.first;
+            int d = it.second; 
+            if(dist[node] + d < dist[adjNode]) {
+                dist[adjNode] = dist[node] + d; 
+                if(d == 0) {
+                    dq.push_front(adjNode); 
+                }
+                else {
+                    dq.push_back(adjNode); 
+                }
+            }
+        }
+    }
+    return dist; 
+}
 int main(){
     // int n, m; 
     // cin >> n >> m ; 
