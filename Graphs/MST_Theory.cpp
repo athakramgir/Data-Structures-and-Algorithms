@@ -49,9 +49,11 @@ int spanningTree(int V, vector<vector<int>>& edges) {
 class DisjointSet {
     vector<int> rank; 
     vector<int> parent;
+    vector<int> size; 
 public: 
     DisjointSet(int n){
         rank.resize(n+1, 0); // 1-based
+        size.resize(n+1, 1); 
         parent.resize(n+1); 
         for(int i = 0; i <= n; i++) {
             parent[i] = i; 
@@ -78,15 +80,32 @@ public:
             parent[pv] = pu; 
         }
     }
+    void unionBySize(int u, int v) {
+        int pu = findPar(u); 
+        int pv = findPar(v); 
+        if(pu == pv) return; 
+        if(size[pv] == size[pu]) {
+            parent[pv] = pu; 
+            size[pu] += size[pv]; 
+        }
+        else if(size[pv] < size[pu]) {
+            parent[pv] = pu;
+            size[pu] += size[pv];  
+        }
+        else {
+            parent[pu] = pv; 
+            size[pv] += size[pu]; 
+        }
+    }
 }; 
 int main(){
     DisjointSet ds(7); 
-    ds.unionByRank(1, 2); 
-    ds.unionByRank(2, 3); 
-    ds.unionByRank(4, 5);
-    ds.unionByRank(6, 7);
-    ds.unionByRank(5, 6); 
-    ds.unionByRank(3, 7); 
+    ds.unionBySize(1, 2); 
+    ds.unionBySize(2, 3); 
+    ds.unionBySize(4, 5);
+    ds.unionBySize(6, 7);
+    ds.unionBySize(5, 6); 
+    ds.unionBySize(3, 7); 
     cout << ds.findPar(7) << endl; 
     // if 3 and 7 are in the same component or not
     if(ds.findPar(3) == ds.findPar(7)) cout << "3 and 7 belong to the same component" << endl; 
